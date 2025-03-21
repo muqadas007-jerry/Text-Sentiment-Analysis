@@ -1,0 +1,67 @@
+ Here's an outline of how you can proceed in Python using libraries like `NLTK`, `sklearn`, and `TF-IDF` for feature extraction.
+import pandas as pd
+import numpy as np
+import re
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report, accuracy_score
+
+# Download necessary NLTK resources
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+
+# Load the dataset
+df = pd.read_csv("IMDB Dataset.csv")
+
+# Text Preprocessing
+def preprocess_text(text):
+    text = text.lower()  # Convert to lowercase
+    text = re.sub(r'[^a-zA-Z]', ' ', text)  # Remove special characters
+    tokens = word_tokenize(text)  # Tokenization
+    tokens = [word for word in tokens if word not in stopwords.words('english')]  # Remove stopwords
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(word) for word in tokens]  # Lemmatization
+    return " ".join(tokens)
+
+# Apply preprocessing
+df['processed_review'] = df['review'].apply(preprocess_text)
+
+# Convert sentiment labels to binary
+label_mapping = {"positive": 1, "negative": 0}
+df['sentiment'] = df['sentiment'].map(label_mapping)
+
+# Feature Engineering
+vectorizer = TfidfVectorizer(max_features=5000)
+X = vectorizer.fit_transform(df['processed_review'])
+y = df['sentiment']
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Logistic Regression model
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+# Predictions
+y_pred = model.predict(X_test)
+
+# Model Evaluation
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
+
+
+I'll provide you with a structured Python script to guide you through the process.
+
+This script follows your task requirements step by step:
+1. **Text Preprocessing**: Tokenization, stopword removal, and lemmatization.
+2. **Feature Engineering**: TF-IDF for numerical representation.
+3. **Model Training**: Logistic Regression.
+4. **Model Evaluation**: Accuracy, precision, recall, and F1-score.
+
+Would you like me to modify it for another classifier, such as Naive Bayes or an embedding-based approach?
