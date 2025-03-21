@@ -1,4 +1,4 @@
- Here's an outline of how you can proceed in Python using libraries like `NLTK`, `sklearn`, and `TF-IDF` for feature extraction.
+proceed in Python using libraries like `NLTK`, `sklearn`, and `TF-IDF` for feature extraction.
 import pandas as pd
 import numpy as np
 import re
